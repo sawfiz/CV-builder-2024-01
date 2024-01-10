@@ -1,5 +1,8 @@
 import { useState } from "react";
-import EducationForm, { EducationFormData, PartialEducationFormData } from "./EducationForm";
+import EducationForm, {
+  EducationFormData,
+  PartialEducationFormData,
+} from "./EducationForm";
 
 const dafaultEducation: PartialEducationFormData = {
   achievement: "",

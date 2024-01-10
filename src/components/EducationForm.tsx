@@ -3,6 +3,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { v4 as uuidv4 } from "uuid";
 import toast, { Toaster } from "react-hot-toast";
+import { format } from "date-fns";
 
 const educationSchema = z.object({
   achievement: z
@@ -32,29 +33,39 @@ export type PartialEducationFormData = Partial<EducationFormData> & {
 };
 
 interface Props {
-  isNew: boolean,
+  isNew: boolean;
   education: EducationFormData | PartialEducationFormData;
   saveEducation: (data: EducationFormData) => void;
 }
 
 const EducationForm = ({ isNew, education, saveEducation }: Props) => {
+  // HTML date input expects YYYY-MM-DD for default values
+  const defaultEducation = {
+    ...education,
+    startDate: education.startDate
+    ? format(new Date(education.startDate), "yyyy-MM-dd")
+    : undefined,
+    endDate: education.endDate
+    ? format(new Date(education.endDate), "yyyy-MM-dd")
+    : undefined,
+  }
+
   const {
     register,
     handleSubmit,
     formState: { errors, isDirty },
-  } = useForm<EducationFormData>({ 
-    defaultValues: education,
-    resolver: zodResolver(educationSchema) });
+  } = useForm({
+    defaultValues: defaultEducation,
+    resolver: zodResolver(educationSchema),
+  });
 
   const onSubmit = (data: EducationFormData) => {
-    console.log("clicked");
-    console.log({ ...data });
     if (isNew) {
       saveEducation({ ...data, id: uuidv4() });
     } else {
-      saveEducation({...data, id: education.id})
+      saveEducation({ ...data, id: education.id! });
     }
-    toast.success("Education saved.")
+    toast.success("Education saved.");
   };
   return (
     <div>
