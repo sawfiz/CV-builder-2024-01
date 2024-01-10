@@ -48,7 +48,7 @@ const ContactForm = ({ contactInfo }: { contactInfo: ContactFormData }) => {
     register,
     control,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     watch,
   } = useForm<ContactFormData>({
     defaultValues: contactInfo, 
@@ -261,7 +261,7 @@ const ContactForm = ({ contactInfo }: { contactInfo: ContactFormData }) => {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <button disabled={!isDirty} type="submit" className="btn btn-primary">
           Save
         </button>
       </form>
