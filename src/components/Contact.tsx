@@ -2,6 +2,7 @@ import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import toast, { Toaster } from "react-hot-toast";
 
 const areaCodeRegex = new RegExp(/^(\+)?\d{1,4}/);
 const mobileRegex = new RegExp(/^\d{7,11}$/);
@@ -43,7 +44,6 @@ const contactSchema = z.object({
 export type ContactFormData = z.infer<typeof contactSchema>;
 
 const ContactForm = ({ contactInfo }: { contactInfo: ContactFormData }) => {
-  console.log("🚀 ~ ContactForm ~ contactInfo:", contactInfo)
   const {
     register,
     control,
@@ -59,6 +59,7 @@ const ContactForm = ({ contactInfo }: { contactInfo: ContactFormData }) => {
   const onSubmit = (data: ContactFormData) => {
     console.log({ ...data });
     localStorage.setItem("contactInfo", JSON.stringify(data));
+    toast.success("Changes saved.")
   };
   return (
     <div>
@@ -264,6 +265,8 @@ const ContactForm = ({ contactInfo }: { contactInfo: ContactFormData }) => {
           Save
         </button>
       </form>
+
+      <Toaster />
     </div>
   );
 };
