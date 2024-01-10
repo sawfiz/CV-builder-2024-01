@@ -214,50 +214,52 @@ const Contact = () => {
           </div>
         </div>
 
-        <div className="row mb-2">
-          <div className="form-group col-md-7">
-            <label htmlFor="country">Country</label>
-            <div className="form-control">
-              <Controller
-                name="country"
-                render={({ field: { name, onChange, value } }) => (
-                  <CountryDropdown
-                    defaultOptionLabel="Select Country"
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    onBlur={() => setCountry(value)}
-                  />
-                )}
-                control={control}
+        <div className="mb-2">
+          <Controller
+            name="country"
+            render={({ field: { name, onChange, value } }) => (
+              <CountryDropdown
+                defaultOptionLabel="Select Country"
+                name={name}
+                value={value}
+                onChange={onChange}
+                onBlur={() => setCountry(value)}
+                style={{
+                  padding: "0.375rem 0.5rem",
+                  borderColor: "#dee2e6",
+                  borderRadius: "0.375rem",
+                  marginRight: "1.5rem",
+                }}
               />
-              {errors.country && (
-                <p className="text-danger">{errors.country.message}</p>
-              )}
-            </div>
-          </div>
+            )}
+            control={control}
+          />
+          {errors.country && (
+            <p className="text-danger">{errors.country.message}</p>
+          )}
 
-          <div className="form-group col-md-5">
-            <label htmlFor="Region">Region</label>
-            <div className="form-control">
-              <Controller
-                name="region"
-                render={({ field: { name, onChange, value } }) => (
-                  <RegionDropdown
-                    defaultOptionLabel="Select Region"
-                    name={name}
-                    country={country}
-                    value={value}
-                    onChange={onChange}
-                  />
-                )}
-                control={control}
+          <Controller
+            name="region"
+            render={({ field: { name, onChange, value } }) => (
+              <RegionDropdown
+                defaultOptionLabel="Select Region"
+                name={name}
+                country={country}
+                value={value}
+                onChange={onChange}
+                style={{
+                  padding: "0.375rem 0.5rem",
+                  borderColor: "#dee2e6",
+                  borderRadius: "0.375rem",
+                  marginRight: "1.5rem",
+                }}
               />
-              {errors.region && (
-                <p className="text-danger">{errors.region.message}</p>
-              )}
-            </div>
-          </div>
+            )}
+            control={control}
+          />
+          {errors.region && (
+            <p className="text-danger">{errors.region.message}</p>
+          )}
         </div>
 
         <button type="submit" className="btn btn-primary">
