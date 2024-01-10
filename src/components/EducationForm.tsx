@@ -25,9 +25,15 @@ export type EducationFormData = z.infer<typeof educationSchema> & {
   id: string;
 };
 
+// Adjust EducationFormData to allow undefined for startDate and endDate
+export type PartialEducationFormData = Partial<EducationFormData> & {
+  startDate: Date | undefined;
+  endDate: Date | undefined;
+};
+
 interface Props {
   isNew: boolean,
-  education: EducationFormData;
+  education: EducationFormData | PartialEducationFormData;
   saveEducation: (data: EducationFormData) => void;
 }
 

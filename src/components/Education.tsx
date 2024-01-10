@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import EducationForm, { EducationFormData } from "./EducationForm";
+import { useState } from "react";
+import EducationForm, { EducationFormData, PartialEducationFormData } from "./EducationForm";
 
-const dafaultEducation: EducationFormData = {
+const dafaultEducation: PartialEducationFormData = {
   achievement: "",
   institution: "",
   major: "",
-  startDate: "",
-  endDate: "",
+  startDate: undefined,
+  endDate: undefined,
 };
 
 interface Props {
