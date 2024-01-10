@@ -3,6 +3,7 @@ import "./App.css";
 import ContactForm from "./components/Contact";
 import { ContactFormData } from "./components/Contact";
 import Education from "./components/Education";
+import { EducationFormData } from "./components/EducationForm";
 import { useEffect, useState } from "react";
 
 function App() {
@@ -24,10 +25,22 @@ function App() {
     postCode: "",
   });
 
+  const [educations, setEducations] = useState<EducationFormData[]>([])
+
+  const addEducation = (data: EducationFormData) => {
+    const updatedEducation = [...educations, data]
+    setEducations(updatedEducation)
+    localStorage.setItem('educations', JSON.stringify(updatedEducation))
+  }
+
   useEffect(() => {
-    const data = localStorage.getItem("contactInfo");
-    if (data) {
-      setContactInfo(JSON.parse(data));
+    const contactInfo = localStorage.getItem("contactInfo");
+    if (contactInfo) {
+      setContactInfo(JSON.parse(contactInfo));
+    }
+    const educations = localStorage.getItem("educations");
+    if (educations) {
+      setEducations(JSON.parse(educations));
     }
     setIsLoading(false)
   }, []);
@@ -36,7 +49,7 @@ function App() {
     <>
       <h1>CV Builder</h1>
       {!isLoading && <ContactForm contactInfo={contactInfo} />}
-      <Education />
+      <Education educations={educations} addEducation={addEducation}/>
     </>
   );
 }

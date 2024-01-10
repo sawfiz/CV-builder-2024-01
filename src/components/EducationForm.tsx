@@ -1,6 +1,7 @@
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { v4 as uuidv4 } from "uuid";
 
 const educationSchema = z.object({
   achievement: z
@@ -19,18 +20,28 @@ const educationSchema = z.object({
   endDate: z.date(),
 });
 
-type EducationFormData = z.infer<typeof educationSchema>;
+export type EducationFormData = z.infer<typeof educationSchema> & {
+  id: string;
+};
 
-const EducationForm = () => {
+interface Props {
+  education: EducationFormData;
+  addEducation: (data: EducationFormData) => void;
+}
+
+const EducationForm = ({ education, addEducation }: Props) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<EducationFormData>({ resolver: zodResolver(educationSchema) });
+  } = useForm<EducationFormData>({ 
+    defaultValues: education,
+    resolver: zodResolver(educationSchema) });
 
   const onSubmit = (data: EducationFormData) => {
     console.log("clicked");
     console.log({ ...data });
+    addEducation({ ...data, id: uuidv4() });
   };
   return (
     <div>
