@@ -1,5 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 const areaCodeRegex = new RegExp(/^(\+)?\d{1,4}/);
@@ -31,18 +33,12 @@ const contactSchema = z.object({
     .string()
     .min(1, { message: "Required" })
     .max(40, { message: "Too long." }),
-  state: z
-    .string()
-    .min(1, { message: "Requred" })
-    .max(40, { message: "Too long." }),
-  country: z
-    .string()
-    .min(1, { message: "Requred" })
-    .max(40, { message: "Too long." }),
   postCode: z
     .string()
     .min(1, { message: "Required" })
     .max(40, { message: "Too long." }),
+  country: z.string().min(1, { message: "Required" }),
+  region: z.string().min(1, { message: "Required" }),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -50,12 +46,15 @@ type ContactFormData = z.infer<typeof contactSchema>;
 const Contact = () => {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<ContactFormData>({ resolver: zodResolver(contactSchema) });
 
+  const [country, setCountry] = useState("");
+
   const onSubmit = (data: ContactFormData) => {
-    console.log(data);
+    console.log({ ...data });
   };
   return (
     <div>
@@ -187,7 +186,7 @@ const Contact = () => {
         </div>
 
         <div className="row mb-2">
-          <div className="form-group col-md-3">
+          <div className="form-group col-md-6">
             <label htmlFor="city">City</label>
             <input
               type="text"
@@ -200,33 +199,7 @@ const Contact = () => {
               <p className="text-danger">{errors.city.message}</p>
             )}
           </div>
-          <div className="form-group col-md-3">
-            <label htmlFor="state">Province / State</label>
-            <input
-              type="text"
-              className="form-control"
-              id="state"
-              placeholder="New Jersey"
-              {...register("state")}
-            />
-            {errors.state && (
-              <p className="text-danger">{errors.state.message}</p>
-            )}
-          </div>
-          <div className="form-group col-md-3">
-            <label htmlFor="state">Country</label>
-            <input
-              type="text"
-              className="form-control"
-              id="country"
-              placeholder="United States"
-              {...register("country")}
-            />
-            {errors.country && (
-              <p className="text-danger">{errors.country.message}</p>
-            )}
-          </div>
-          <div className="form-group col-md-3">
+          <div className="form-group col-md-6">
             <label htmlFor="zip">Post Code</label>
             <input
               type="text"
@@ -238,6 +211,52 @@ const Contact = () => {
             {errors.postCode && (
               <p className="text-danger">{errors.postCode.message}</p>
             )}
+          </div>
+        </div>
+
+        <div className="row mb-2">
+          <div className="form-group col-md-7">
+            <label htmlFor="country">Country</label>
+            <div className="form-control">
+              <Controller
+                name="country"
+                render={({ field: { name, onChange, value } }) => (
+                  <CountryDropdown
+                    defaultOptionLabel="Select Country"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    onBlur={() => setCountry(value)}
+                  />
+                )}
+                control={control}
+              />
+              {errors.country && (
+                <p className="text-danger">{errors.country.message}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="form-group col-md-5">
+            <label htmlFor="Region">Region</label>
+            <div className="form-control">
+              <Controller
+                name="region"
+                render={({ field: { name, onChange, value } }) => (
+                  <RegionDropdown
+                    defaultOptionLabel="Select Region"
+                    name={name}
+                    country={country}
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}
+                control={control}
+              />
+              {errors.region && (
+                <p className="text-danger">{errors.region.message}</p>
+              )}
+            </div>
           </div>
         </div>
 
