@@ -13,3 +13,11 @@
 ::-ms-input-placeholder { /* Edge 12 -18 */
   color: #a0a0a0 !important;
 }
+
+.countryDropdownContainer {
+  padding: 0.375rem 0.5rem;
+  border: 1px solid #dee2e6;
+  border-radius: 0.375rem;
+  margin-right: 1.5rem;
+  /* Add any other styles you want to apply */
+}

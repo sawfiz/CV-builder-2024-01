@@ -1,5 +1,4 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -49,9 +48,9 @@ const Contact = () => {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
+    getValues,
   } = useForm<ContactFormData>({ resolver: zodResolver(contactSchema) });
-
-  const [country, setCountry] = useState("");
 
   const onSubmit = (data: ContactFormData) => {
     console.log({ ...data });
@@ -214,57 +213,52 @@ const Contact = () => {
           </div>
         </div>
 
-        <div className="mb-2">
-          <Controller
-            name="country"
-            render={({ field: { name, onChange, value } }) => (
-              <CountryDropdown
-                defaultOptionLabel="Select Country"
-                name={name}
-                value={value}
-                onChange={onChange}
-                onBlur={() => setCountry(value)}
-                style={{
-                  padding: "0.375rem 0.5rem",
-                  borderColor: "#dee2e6",
-                  borderRadius: "0.375rem",
-                  marginRight: "1.5rem",
-                }}
-              />
+        <div className="row mb-2">
+          <div className="col-md-7">
+            <Controller
+              name="country"
+              render={({ field: { name, onChange, value } }) => (
+                <div>
+                  <CountryDropdown
+                    defaultOptionLabel="Select Country"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    className="countryDropdownContainer"
+                  />
+                </div>
+              )}
+              control={control}
+            />
+            {errors.country && (
+              <p className="text-danger">{errors.country.message}</p>
             )}
-            control={control}
-          />
-          {errors.country && (
-            <p className="text-danger">{errors.country.message}</p>
-          )}
-
-          <Controller
-            name="region"
-            render={({ field: { name, onChange, value } }) => (
-              <RegionDropdown
-                defaultOptionLabel="Select Region"
-                name={name}
-                country={country}
-                value={value}
-                onChange={onChange}
-                style={{
-                  padding: "0.375rem 0.5rem",
-                  borderColor: "#dee2e6",
-                  borderRadius: "0.375rem",
-                  marginRight: "1.5rem",
-                }}
-              />
+          </div>
+          <div className="col-md-5">
+            <Controller
+              name="region"
+              render={({ field: { name, onChange, value } }) => (
+                <RegionDropdown
+                  defaultOptionLabel="Select Region"
+                  name={name}
+                  country={watch("country")}
+                  value={value}
+                  onChange={onChange}
+                  className="countryDropdownContainer"
+                />
+              )}
+              control={control}
+            />
+            {errors.region && (
+              <p className="text-danger">{errors.region.message}</p>
             )}
-            control={control}
-          />
-          {errors.region && (
-            <p className="text-danger">{errors.region.message}</p>
-          )}
+          </div>
         </div>
 
         <button type="submit" className="btn btn-primary">
           Save
         </button>
+
       </form>
     </div>
   );
