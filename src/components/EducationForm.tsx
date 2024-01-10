@@ -1,41 +1,114 @@
-import React from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const educationSchema = z.object({
+  achievement: z
+    .string()
+    .min(1, { message: "Required" })
+    .max(50, { message: "Too long." }),
+  institution: z
+    .string()
+    .min(1, { message: "Required" })
+    .max(60, { message: "Too long." }),
+  major: z
+    .string()
+    .min(1, { message: "Required" })
+    .max(40, { message: "Too long." }),
+  startDate: z.date(),
+  endDate: z.date(),
+});
+
+type EducationFormData = z.infer<typeof educationSchema>;
 
 const EducationForm = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<EducationFormData>({ resolver: zodResolver(educationSchema) });
+
+  const onSubmit = (data: EducationFormData) => {
+    console.log("clicked");
+    console.log({ ...data });
+  };
   return (
     <div>
       <h4>New Education</h4>
-      <form>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-2">
-          <select name="" id="" className="form-select">
-            <option value="">Select achivement</option>
-            <option value="certificate">Certificate</option>
-            <option value="diploma">Diploma</option>
-            <option value="bachlor">Bachelor's Degree</option>
-            <option value="master">Master's Degree</option>
-            <option value="doctor">Doctoral Degree</option>
-          </select>
+          <label className="form-label">Achievement / Degree Received</label>
+          <input
+            type="text"
+            className="form-control"
+            {...register("achievement")}
+          />
+          {errors.achievement && (
+            <p className="text-danger">{errors.achievement.message}</p>
+          )}
         </div>
-        <div className="row">
+
+        <div className="row mb-2">
           <div className="form-group col-md-6">
-            <label htmlFor="institution" className="form-label">Institution</label>
-            <input name="institution" type="text" className="form-control" />
+            <label htmlFor="institution" className="form-label">
+              Institution
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              {...register("institution")}
+            />
+            {errors.institution && (
+              <p className="text-danger">{errors.institution.message}</p>
+            )}
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="major" className="form-label">Major</label>
-            <input name="major" type="text" className="form-control" />
+            <label htmlFor="major" className="form-label">
+              Major
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              {...register("major")}
+            />
+            {errors.major && (
+              <p className="text-danger">{errors.major.message}</p>
+            )}
           </div>
         </div>
-        <div className="row">
+
+        <div className="row mb-2">
           <div className="form-group col-md-6">
-            <label htmlFor="startDate" className="form-label">From</label>
-            <input name="startDate" type="date" className="form-control" />
+            <label htmlFor="startDate" className="form-label">
+              From
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              {...register("startDate", { valueAsDate: true })}
+            />
+            {errors.startDate && (
+              <p className="text-danger">{errors.startDate.message}</p>
+            )}
           </div>
           <div className="form-group col-md-6">
-            <label htmlFor="endDate" className="form-label">To</label>
-            <input name="endDate" type="date" className="form-control" />
+            <label htmlFor="endDate" className="form-label">
+              To
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              {...register("endDate", { valueAsDate: true })}
+            />
+            {errors.endDate && (
+              <p className="text-danger">{errors.endDate.message}</p>
+            )}
           </div>
         </div>
-        <button className="btn btn-primary">Save</button>
+
+        <button type="submit" className="btn btn-primary">
+          Save
+        </button>
       </form>
     </div>
   );

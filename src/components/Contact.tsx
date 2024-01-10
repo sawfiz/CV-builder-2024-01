@@ -1,7 +1,7 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 
 const areaCodeRegex = new RegExp(/^(\+)?\d{1,4}/);
 const mobileRegex = new RegExp(/^\d{7,11}$/);
@@ -257,7 +257,6 @@ const Contact = () => {
         <button type="submit" className="btn btn-primary">
           Save
         </button>
-
       </form>
     </div>
   );
