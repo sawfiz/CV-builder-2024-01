@@ -49,7 +49,6 @@ const Contact = () => {
     handleSubmit,
     formState: { errors },
     watch,
-    getValues,
   } = useForm<ContactFormData>({ resolver: zodResolver(contactSchema) });
 
   const onSubmit = (data: ContactFormData) => {
