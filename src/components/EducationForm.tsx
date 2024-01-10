@@ -36,19 +36,25 @@ interface Props {
   isNew: boolean;
   education: EducationFormData | PartialEducationFormData;
   saveEducation: (data: EducationFormData) => void;
+  setShowAddEducation: (flag: boolean) => void;
 }
 
-const EducationForm = ({ isNew, education, saveEducation }: Props) => {
+const EducationForm = ({
+  isNew,
+  education,
+  saveEducation,
+  setShowAddEducation,
+}: Props) => {
   // HTML date input expects YYYY-MM-DD for default values
   const defaultEducation = {
     ...education,
     startDate: education.startDate
-    ? format(new Date(education.startDate), "yyyy-MM-dd")
-    : undefined,
+      ? format(new Date(education.startDate), "yyyy-MM-dd")
+      : undefined,
     endDate: education.endDate
-    ? format(new Date(education.endDate), "yyyy-MM-dd")
-    : undefined,
-  }
+      ? format(new Date(education.endDate), "yyyy-MM-dd")
+      : undefined,
+  };
 
   const {
     register,
@@ -62,6 +68,7 @@ const EducationForm = ({ isNew, education, saveEducation }: Props) => {
   const onSubmit = (data: EducationFormData) => {
     if (isNew) {
       saveEducation({ ...data, id: uuidv4() });
+      setShowAddEducation(false);
     } else {
       saveEducation({ ...data, id: education.id! });
     }

@@ -29,6 +29,7 @@ const Education = ({ educations, addEducation, updateEducation }: Props) => {
           isNew={false}
           education={edu}
           saveEducation={updateEducation}
+          setShowAddEducation={setShowAddEducation}
         />
       ))}
 
@@ -43,6 +44,7 @@ const Education = ({ educations, addEducation, updateEducation }: Props) => {
           isNew={true}
           education={dafaultEducation}
           saveEducation={addEducation}
+          setShowAddEducation={setShowAddEducation}
         />
       )}
     </>
