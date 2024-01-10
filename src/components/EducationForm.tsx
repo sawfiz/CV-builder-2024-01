@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { v4 as uuidv4 } from "uuid";
+import toast, { Toaster } from "react-hot-toast";
 
 const educationSchema = z.object({
   achievement: z
@@ -25,15 +26,16 @@ export type EducationFormData = z.infer<typeof educationSchema> & {
 };
 
 interface Props {
+  isNew: boolean,
   education: EducationFormData;
-  addEducation: (data: EducationFormData) => void;
+  saveEducation: (data: EducationFormData) => void;
 }
 
-const EducationForm = ({ education, addEducation }: Props) => {
+const EducationForm = ({ isNew, education, saveEducation }: Props) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<EducationFormData>({ 
     defaultValues: education,
     resolver: zodResolver(educationSchema) });
@@ -41,7 +43,12 @@ const EducationForm = ({ education, addEducation }: Props) => {
   const onSubmit = (data: EducationFormData) => {
     console.log("clicked");
     console.log({ ...data });
-    addEducation({ ...data, id: uuidv4() });
+    if (isNew) {
+      saveEducation({ ...data, id: uuidv4() });
+    } else {
+      saveEducation({...data, id: education.id})
+    }
+    toast.success("Education saved.")
   };
   return (
     <div>
@@ -117,10 +124,11 @@ const EducationForm = ({ education, addEducation }: Props) => {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary">
+        <button disabled={!isDirty} type="submit" className="btn btn-primary">
           Save
         </button>
       </form>
+      <Toaster />
     </div>
   );
 };

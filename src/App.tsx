@@ -7,7 +7,7 @@ import { EducationFormData } from "./components/EducationForm";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   const [contactInfo, setContactInfo] = useState<ContactFormData>({
     firstname: "",
@@ -25,13 +25,21 @@ function App() {
     postCode: "",
   });
 
-  const [educations, setEducations] = useState<EducationFormData[]>([])
+  const [educations, setEducations] = useState<EducationFormData[]>([]);
 
   const addEducation = (data: EducationFormData) => {
-    const updatedEducation = [...educations, data]
-    setEducations(updatedEducation)
-    localStorage.setItem('educations', JSON.stringify(updatedEducation))
-  }
+    const updatedEducations = [...educations, data];
+    setEducations(updatedEducations);
+    localStorage.setItem("educations", JSON.stringify(updatedEducations));
+  };
+
+  const updateEducation = (data: EducationFormData) => {
+    const updatedEducations = educations.map((edu) =>
+      edu.id === data.id ? data : edu
+    );
+    setEducations(updatedEducations);
+    localStorage.setItem("educations", JSON.stringify(updatedEducations));
+  };
 
   useEffect(() => {
     const contactInfo = localStorage.getItem("contactInfo");
@@ -42,14 +50,18 @@ function App() {
     if (educations) {
       setEducations(JSON.parse(educations));
     }
-    setIsLoading(false)
+    setIsLoading(false);
   }, []);
 
   return (
     <>
       <h1>CV Builder</h1>
       {!isLoading && <ContactForm contactInfo={contactInfo} />}
-      <Education educations={educations} addEducation={addEducation}/>
+      <Education
+        educations={educations}
+        addEducation={addEducation}
+        updateEducation={updateEducation}
+      />
     </>
   );
 }
