@@ -40,19 +40,25 @@ const contactSchema = z.object({
   region: z.string().min(1, { message: "Required" }),
 });
 
-type ContactFormData = z.infer<typeof contactSchema>;
+export type ContactFormData = z.infer<typeof contactSchema>;
 
-const Contact = () => {
+const ContactForm = ({ contactInfo }: { contactInfo: ContactFormData }) => {
+  console.log("🚀 ~ ContactForm ~ contactInfo:", contactInfo)
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
     watch,
-  } = useForm<ContactFormData>({ resolver: zodResolver(contactSchema) });
+  } = useForm<ContactFormData>({
+    defaultValues: contactInfo, 
+    resolver: zodResolver(contactSchema),
+  });
+
 
   const onSubmit = (data: ContactFormData) => {
     console.log({ ...data });
+    localStorage.setItem("contactInfo", JSON.stringify(data));
   };
   return (
     <div>
@@ -262,4 +268,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default ContactForm;
