@@ -1,9 +1,9 @@
-import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { v4 as uuidv4 } from "uuid";
-import toast, { Toaster } from "react-hot-toast";
 import { format } from "date-fns";
+import { FieldValues, useForm } from "react-hook-form";
+import toast, { Toaster } from "react-hot-toast";
+import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
 
 const educationSchema = z.object({
   achievement: z
@@ -65,12 +65,28 @@ const EducationForm = ({
     resolver: zodResolver(educationSchema),
   });
 
-  const onSubmit = (data: EducationFormData) => {
+  const onSubmit = (data: FieldValues) => {
     if (isNew) {
-      saveEducation({ ...data, id: uuidv4() });
+      const dataWithID: EducationFormData = {
+        id: uuidv4(),
+        achievement: data.achievement,
+        institution: data.institution,
+        major: data.major,
+        startDate: data.startDate,
+        endDate: data.endDate,
+      };
+      saveEducation(dataWithID);
       setShowAddEducation(false);
     } else {
-      saveEducation({ ...data, id: education.id! });
+      const dataWithID: EducationFormData = {
+        id: education.id!,
+        achievement: data.achievement,
+        institution: data.institution,
+        major: data.major,
+        startDate: data.startDate,
+        endDate: data.endDate,
+      };
+      saveEducation(dataWithID);
     }
     toast.success("Education saved.");
   };
