@@ -36,6 +36,7 @@ interface Props {
   isNew: boolean;
   education: EducationFormData | PartialEducationFormData;
   saveEducation: (data: EducationFormData) => void;
+  deleteEducation: (id: string) => void;
   setShowAddEducation: (flag: boolean) => void;
 }
 
@@ -43,6 +44,7 @@ const EducationForm = ({
   isNew,
   education,
   saveEducation,
+  deleteEducation,
   setShowAddEducation,
 }: Props) => {
   // HTML date input expects YYYY-MM-DD for default values
@@ -91,8 +93,7 @@ const EducationForm = ({
     toast.success("Education saved.");
   };
   return (
-    <div>
-      <h4>New Education</h4>
+    <div className="mb-4">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-2">
           <label className="form-label">Achievement / Degree Received</label>
@@ -164,9 +165,27 @@ const EducationForm = ({
           </div>
         </div>
 
-        <button disabled={!isDirty} type="submit" className="btn btn-primary">
-          Save
-        </button>
+        <div className="d-flex justify-content-around">
+          <button disabled={!isDirty} type="submit" className="btn btn-primary">
+            {isNew? "Add" : "Update"}
+          </button>
+          {!isNew && (
+            <button
+              className="btn btn-danger"
+              onClick={() => deleteEducation(education.id!)}
+            >
+              Delete
+            </button>
+          )}
+          {isNew && (
+            <button
+              className="btn btn-danger"
+              onClick={() => setShowAddEducation(false)}
+            >
+              Cancel
+            </button>
+          )}
+        </div>
       </form>
       <Toaster />
     </div>

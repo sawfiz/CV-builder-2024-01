@@ -16,9 +16,10 @@ interface Props {
   educations: EducationFormData[];
   addEducation: (data: EducationFormData) => void;
   updateEducation: (data: EducationFormData) => void;
+  deleteEducation: (id: string) => void;
 }
 
-const Education = ({ educations, addEducation, updateEducation }: Props) => {
+const Education = ({ educations, addEducation, updateEducation, deleteEducation }: Props) => {
   const [showAddEducation, setShowAddEducation] = useState(false);
   return (
     <>
@@ -29,6 +30,7 @@ const Education = ({ educations, addEducation, updateEducation }: Props) => {
           isNew={false}
           education={edu}
           saveEducation={updateEducation}
+          deleteEducation={deleteEducation}
           setShowAddEducation={setShowAddEducation}
         />
       ))}
@@ -44,6 +46,7 @@ const Education = ({ educations, addEducation, updateEducation }: Props) => {
           isNew={true}
           education={dafaultEducation}
           saveEducation={addEducation}
+          deleteEducation={deleteEducation}
           setShowAddEducation={setShowAddEducation}
         />
       )}

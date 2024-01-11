@@ -41,6 +41,12 @@ function App() {
     localStorage.setItem("educations", JSON.stringify(updatedEducations));
   };
 
+  const deleteEducation = (id: string) => {
+    const updatedEducations = educations.filter((edu) => edu.id !== id);
+    setEducations(updatedEducations);
+    localStorage.setItem("educations", JSON.stringify(updatedEducations));
+  };
+
   useEffect(() => {
     const contactInfo = localStorage.getItem("contactInfo");
     if (contactInfo) {
@@ -61,6 +67,7 @@ function App() {
         educations={educations}
         addEducation={addEducation}
         updateEducation={updateEducation}
+        deleteEducation={deleteEducation}
       />
     </>
   );
